@@ -98,8 +98,7 @@ export function SevenDayPlanner({
               Irrigation: {day.irrigation.decided ? day.irrigation.motor : "Not decided"}
             </Text>
             <Text style={styles.decision}>Spray: {day.spray.label}</Text>
-            <Text style={styles.action}>{day.action}</Text>
-            {advisor ? <Text style={styles.advisor}>Advisor: {advisor}</Text> : null}
+            <Text style={styles.action}>{advisor ?? day.action}</Text>
             <Text style={styles.moisture}>
               {day.moistureUsed == null
                 ? "No moisture reading"
@@ -209,12 +208,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     lineHeight: 24,
     color: colors.textPrimary,
-  },
-  advisor: {
-    marginTop: 6,
-    fontSize: 16,
-    lineHeight: 22,
-    color: colors.primary,
   },
   moisture: {
     marginTop: 8,

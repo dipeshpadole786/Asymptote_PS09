@@ -54,35 +54,27 @@ function toGrokInput(
   plan: FarmPlan,
 ): GrokPlanInput {
   return {
+    place: profile.place.label || profile.place.name,
     crop: cropById(profile.crop).name,
     cropStage: stageLabel(profile.stage),
-    soil: {
-      soilType: soil.soilType,
-      drainage: soil.drainage,
-      fieldCapacity: soil.fieldCapacity,
-      moistureBaseline: soil.moistureBaseline,
-      soilTemperature: soil.soilTemperature,
-      source: soil.source,
-    },
-    soilMoisture: moisture.moisture,
+    soilType: soil.soilType,
+    drainage: soil.drainage,
+    moistureNow: moisture.moisture,
     moistureSource: moisture.source,
-    sevenDayWeather: plan.days.map((day) => ({
+    days: plan.days.map((day) => ({
       day: day.weekday,
       temperatureMax: day.temperatureMax,
+      temperatureMin: day.temperatureMin,
       humidity: day.humidityMean,
       rainProbability: day.rainProbability,
       rainfallMm: day.rainfallMm,
       windSpeed: day.windSpeed,
-    })),
-    irrigationDecisions: plan.days.map((day) => ({
-      day: day.weekday,
+      condition: day.condition,
+      moistureUsed: day.moistureUsed,
+      moistureIsEstimate: day.moistureIsEstimate,
       motor: day.irrigation.motor,
-      reason: day.irrigation.reason,
-    })),
-    sprayDecisions: plan.days.map((day) => ({
-      day: day.weekday,
-      advice: day.spray.label,
-      reason: day.spray.reason,
+      motorDecided: day.irrigation.decided,
+      spray: day.spray.advice,
     })),
   };
 }

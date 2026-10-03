@@ -38,14 +38,19 @@ export function PlannerScreen({ navigation }: Props) {
             <Text style={styles.intro}>
               {crop.name}, {stageLabel(profile.stage).toLowerCase()}. Later days estimate how moisture changes after rain or irrigation.
             </Text>
+            {advisor.status === "loading" ? (
+              <Text style={styles.note}>Writing a field note from this week's weather...</Text>
+            ) : null}
             {advisor.status === "ready" ? (
               <GlassCard>
-                <Text style={styles.kicker}>In simple words</Text>
+                <Text style={styles.kicker}>Week note</Text>
                 <Text style={styles.summary}>{advisor.summary}</Text>
               </GlassCard>
             ) : null}
             {advisor.status === "error" ? (
-              <Text style={styles.note}>Grok is unavailable. Showing the farm rules instead.</Text>
+              <Text style={styles.note}>
+                The week note could not be written. Motor and spray still follow the farm rules.
+              </Text>
             ) : null}
             <SevenDayPlanner
               days={plan.days}

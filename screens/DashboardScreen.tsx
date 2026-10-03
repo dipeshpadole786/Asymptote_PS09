@@ -132,18 +132,18 @@ function AdvisorNote({
     return null;
   }
   if (advisor.status === "loading") {
-    return <Text style={styles.advisorMuted}>Writing a simpler note...</Text>;
+    return <Text style={styles.advisorMuted}>Writing this week's field note...</Text>;
   }
   if (advisor.status === "error") {
     return (
       <Text style={styles.advisorMuted}>
-        Grok is unavailable. Showing the farm rules instead.
+        The week note could not be written. Motor and spray still follow the farm rules.
       </Text>
     );
   }
   return (
     <GlassCard>
-      <Text style={styles.kicker}>In simple words</Text>
+      <Text style={styles.kicker}>Week note</Text>
       <Text style={styles.advisorBody}>{advisor.summary}</Text>
     </GlassCard>
   );
