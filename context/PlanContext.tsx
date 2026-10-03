@@ -15,7 +15,12 @@ import {
   isGrokConfigured,
   type GrokPlanInput,
 } from "../services/grokService";
-import { getSoilMoisture, type MoistureReading } from "../services/sensorService";
+import {
+  getSoilMoisture,
+  iotSensorUrl,
+  type MoistureReading,
+  type MotorReport,
+} from "../services/sensorService";
 import { getSoilData, type SoilData } from "../services/soilService";
 import { getWeather, type WeatherReport } from "../services/weatherService";
 import { cropById, stageLabel, type FarmProfile } from "../types/farm";
@@ -34,6 +39,7 @@ type PlanContextValue = {
   weather: WeatherReport | null;
   soil: SoilData | null;
   moisture: MoistureReading;
+  motor: MotorReport | null;
   plan: FarmPlan | null;
   advisor: AdvisorState;
   refresh: () => void;
@@ -43,6 +49,13 @@ const UNAVAILABLE: MoistureReading = {
   moisture: null,
   source: "unavailable",
   label: "Sensor unavailable",
+};
+
+const OFFLINE: MoistureReading = {
+  moisture: null,
+  source: "unavailable",
+  label: "Offline",
+  status: "offline",
 };
 
 const PlanContext = createContext<PlanContextValue | null>(null);
@@ -103,11 +116,9 @@ export function PlanProvider({ children }: { children: ReactNode }) {
     setStatus("loading");
     setError(null);
     try {
-      const demo = demoRef.current;
-      const [nextWeather, nextSoil, nextSensor] = await Promise.all([
+      const [nextWeather, nextSoil] = await Promise.all([
         getWeather(latitude, longitude),
         getSoilData(latitude, longitude),
-        getSoilMoisture({ demoMode: demo.demoMode, demoMoisture: demo.demoMoisture }),
       ]);
       if (request.current !== id) {
         return;
@@ -119,7 +130,6 @@ export function PlanProvider({ children }: { children: ReactNode }) {
       weatherRef.current = nextWeather;
       setWeather(nextWeather);
       setSoil(mergedSoil);
-      setSensor(nextSensor);
       setStatus("ready");
     } catch (err) {
       if (request.current !== id) {
@@ -144,19 +154,28 @@ export function PlanProvider({ children }: { children: ReactNode }) {
   }, [session, latitude, longitude, refresh]);
 
   useEffect(() => {
-    if (!profile || demoMode) {
+    if (!session) {
       return;
     }
     let cancelled = false;
-    void getSoilMoisture({ demoMode: false, demoMoisture: 0 }).then((reading) => {
-      if (!cancelled) {
-        setSensor(reading);
-      }
-    });
+    const loadSensor = () => {
+      const demo = demoRef.current;
+      void getSoilMoisture({
+        demoMode: demo.demoMode,
+        demoMoisture: demo.demoMoisture,
+      }).then((reading) => {
+        if (!cancelled) {
+          setSensor(reading);
+        }
+      });
+    };
+    loadSensor();
+    const timer = setInterval(loadSensor, 4000);
     return () => {
       cancelled = true;
+      clearInterval(timer);
     };
-  }, [demoMode, profile]);
+  }, [session]);
 
   const weatherForPlace =
     weather &&
@@ -173,6 +192,9 @@ export function PlanProvider({ children }: { children: ReactNode }) {
     if (sensor?.source === "iot") {
       return sensor;
     }
+    if (iotSensorUrl()) {
+      return sensor ?? OFFLINE;
+    }
     if (demoMode) {
       return {
         moisture: Math.max(0, Math.min(100, Math.round(demoMoisture))),
@@ -184,7 +206,7 @@ export function PlanProvider({ children }: { children: ReactNode }) {
       return sensor;
     }
     return UNAVAILABLE;
-  }, [sensor, demoMode, demoMoisture]);
+  }, [sensor, demoMode, demoMoisture]); // iotSensorUrl() is env and does not change during a session
 
   const plan = useMemo(() => {
     if (!weatherForPlace || !soilForPlace || !profile) {
@@ -227,6 +249,8 @@ export function PlanProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [weatherForPlace, soilForPlace, profile]);
 
+  const motor = moisture.motor ?? null;
+
   const value = useMemo(
     () => ({
       status,
@@ -234,11 +258,12 @@ export function PlanProvider({ children }: { children: ReactNode }) {
       weather: weatherForPlace,
       soil: soilForPlace,
       moisture,
+      motor,
       plan,
       advisor,
       refresh,
     }),
-    [status, error, weatherForPlace, soilForPlace, moisture, plan, advisor, refresh],
+    [status, error, weatherForPlace, soilForPlace, moisture, motor, plan, advisor, refresh],
   );
 
   return <PlanContext.Provider value={value}>{children}</PlanContext.Provider>;

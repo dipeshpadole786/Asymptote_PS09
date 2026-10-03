@@ -22,6 +22,8 @@ export type RootStackParamList = {
   Planner: undefined;
   Alerts: undefined;
   More: undefined;
+  ScanCrop: undefined;
+  FieldMap: undefined;
 };
 
 type Props = NativeStackScreenProps<RootStackParamList, "Welcome">;

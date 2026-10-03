@@ -23,7 +23,7 @@ import type { RootStackParamList } from "./WelcomeScreen";
 type Props = NativeStackScreenProps<RootStackParamList, "FarmSetup">;
 
 export function FarmSetupScreen({ navigation }: Props) {
-  const { profile, saveProfile } = useFarm();
+  const { profile, draftPlace, saveProfile } = useFarm();
   useRequireSession();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Place[]>([]);
@@ -31,7 +31,7 @@ export function FarmSetupScreen({ navigation }: Props) {
   const [searchError, setSearchError] = useState<string | null>(null);
   const [locating, setLocating] = useState(false);
   const [locError, setLocError] = useState<string | null>(null);
-  const [selected, setSelected] = useState<Place | null>(profile?.place ?? null);
+  const [selected, setSelected] = useState<Place | null>(profile?.place ?? draftPlace);
   const [crop, setCrop] = useState<CropId | null>(profile?.crop ?? null);
   const [stage, setStage] = useState<CropStage | null>(profile?.stage ?? null);
 

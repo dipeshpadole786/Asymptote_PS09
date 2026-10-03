@@ -39,3 +39,6 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# real ESP32 readings logged by the sensor bridge
+server/data/

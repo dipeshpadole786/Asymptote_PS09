@@ -42,6 +42,22 @@ export function MoreScreen({ navigation }: Props) {
           >
             <Text style={styles.rowButtonText}>Edit farm</Text>
           </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Scan crop"
+            onPress={() => navigation.navigate("ScanCrop")}
+            style={styles.rowButton}
+          >
+            <Text style={styles.rowButtonText}>Scan crop</Text>
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Field map"
+            onPress={() => navigation.navigate("FieldMap")}
+            style={styles.rowButton}
+          >
+            <Text style={styles.rowButtonText}>Field map</Text>
+          </Pressable>
         </GlassCard>
         <Pressable
           accessibilityRole="switch"
@@ -53,7 +69,9 @@ export function MoreScreen({ navigation }: Props) {
           <View>
             <Text style={styles.toggleTitle}>Demo sensor</Text>
             <Text style={styles.toggleHint}>
-              {demoMode ? "On. Moisture is sample data." : "Off. A live sensor is required."}
+              {demoMode
+                ? "On. The dashboard still uses the ESP32 reading."
+                : "Off. The dashboard uses the ESP32 reading."}
             </Text>
           </View>
           <Text style={styles.toggleValue}>{demoMode ? "On" : "Off"}</Text>

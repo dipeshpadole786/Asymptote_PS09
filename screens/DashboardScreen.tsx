@@ -1,7 +1,10 @@
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AlertCard } from "../components/AlertCard";
+import { CropCheckCard } from "../components/CropCheckCard";
 import { BOTTOM_NAV_CLEARANCE } from "../components/BottomNavigation";
+import { MotorActivityCard } from "../components/MotorActivityCard";
+import { MotorStatsCard } from "../components/MotorStatsCard";
 import { MotorStatusCard } from "../components/MotorStatusCard";
 import { SevenDayPlanner } from "../components/SevenDayPlanner";
 import { SoilMoistureCard } from "../components/SoilMoistureCard";
@@ -18,8 +21,8 @@ import type { RootStackParamList } from "./WelcomeScreen";
 type Props = NativeStackScreenProps<RootStackParamList, "Dashboard">;
 
 export function DashboardScreen({ navigation }: Props) {
-  const { session, profile, demoMode, setDemoMode, setDemoMoisture, signOut } = useFarm();
-  const { status, error, weather, soil, moisture, plan, advisor, refresh } = usePlan();
+  const { session, profile, scan, demoMode, setDemoMode, setDemoMoisture, signOut } = useFarm();
+  const { status, error, weather, soil, moisture, motor, plan, advisor, refresh } = usePlan();
   useRequireSession();
 
   const today = plan?.days[0];
@@ -97,11 +100,14 @@ export function DashboardScreen({ navigation }: Props) {
               onDemoMode={setDemoMode}
               onDemoMoisture={setDemoMoisture}
             />
-            <MotorStatusCard
-              decision={today.irrigation}
-              cropName={crop.name}
-              stageName={stageLabel(profile.stage)}
+            <CropCheckCard
+              scan={scan}
+              onScan={() => navigation.navigate("ScanCrop")}
+              onMap={() => navigation.navigate("FieldMap")}
             />
+            <MotorStatusCard report={motor} />
+            <MotorActivityCard history={motor?.history ?? []} />
+            <MotorStatsCard report={motor} />
             <AlertCard alerts={plan.alerts} />
             <SevenDayPlanner
               days={plan.days}
@@ -112,6 +118,17 @@ export function DashboardScreen({ navigation }: Props) {
             <Text style={styles.rules}>
               Irrigation and spraying use fixed farm rules. They do not come from an AI guess.
             </Text>
+          </View>
+        ) : session ? (
+          <View style={styles.stack}>
+            <CropCheckCard
+              scan={scan}
+              onScan={() => navigation.navigate("ScanCrop")}
+              onMap={() => navigation.navigate("FieldMap")}
+            />
+            <MotorStatusCard report={motor} />
+            <MotorActivityCard history={motor?.history ?? []} />
+            <MotorStatsCard report={motor} />
           </View>
         ) : null}
 

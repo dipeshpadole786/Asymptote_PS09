@@ -31,11 +31,19 @@ export function SoilMoistureCard({
     <GlassCard>
       <View style={styles.titleRow}>
         <Text style={styles.kicker}>Soil moisture</Text>
-        {moisture.source === "demo" ? (
+        {moisture.source === "iot" ? (
+          <View style={styles.liveBadge}>
+            <Text style={styles.liveText}>Live</Text>
+          </View>
+        ) : moisture.source === "demo" ? (
           <View style={styles.demoBadge}>
             <Text style={styles.demoText}>DEMO</Text>
           </View>
-        ) : null}
+        ) : (
+          <View style={styles.offlineBadge}>
+            <Text style={styles.offlineText}>Offline</Text>
+          </View>
+        )}
       </View>
 
       <Text style={styles.reading} maxFontSizeMultiplier={1.15}>
@@ -46,7 +54,7 @@ export function SoilMoistureCard({
           ? "Live IoT sensor"
           : moisture.source === "demo"
             ? "Demo sensor. This is not a live IoT device."
-            : "Sensor unavailable. Connect the device or turn on the demo sensor."}
+            : "Offline. Waiting for the ESP32 reading."}
       </Text>
 
       <Pressable
@@ -120,6 +128,30 @@ const styles = StyleSheet.create({
   },
   demoText: {
     color: colors.warning,
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 0.4,
+  },
+  liveBadge: {
+    backgroundColor: colors.okSoft,
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  liveText: {
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 0.4,
+  },
+  offlineBadge: {
+    backgroundColor: colors.dangerSoft,
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  offlineText: {
+    color: colors.danger,
     fontSize: 12,
     fontWeight: "800",
     letterSpacing: 0.4,

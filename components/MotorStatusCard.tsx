@@ -1,35 +1,32 @@
 import { StyleSheet, Text, View } from "react-native";
-import type { IrrigationDecision } from "../logic/irrigationLogic";
+import type { MotorReport } from "../services/sensorService";
 import { colors } from "../theme/colors";
+import { formatPercent } from "../utils/format";
 import { GlassCard } from "./ui";
 
-export function MotorStatusCard({
-  decision,
-  cropName,
-  stageName,
-}: {
-  decision: IrrigationDecision;
-  cropName: string;
-  stageName: string;
-}) {
-  const label = decision.decided ? decision.motor : "—";
-  const on = decision.decided && decision.motor === "ON";
+export function MotorStatusCard({ report }: { report: MotorReport | null }) {
+  const motor = report?.motor ?? null;
+  const on = motor === "ON";
 
   return (
     <GlassCard>
       <Text style={styles.kicker}>Motor</Text>
       <View style={[styles.pill, on ? styles.pillOn : styles.pillOff]}>
         <Text style={[styles.pillText, on ? styles.pillTextOn : styles.pillTextOff]}>
-          {label}
+          {motor ?? "—"}
         </Text>
       </View>
+      <Text style={styles.moisture} maxFontSizeMultiplier={1.2}>
+        {report?.moisture == null ? "Soil moisture —" : `Soil moisture ${formatPercent(report.moisture)}`}
+      </Text>
       <Text style={styles.reason} maxFontSizeMultiplier={1.25}>
-        {decision.reason}
+        {report?.reason ?? "Waiting for the ESP32."}
       </Text>
-      <Text style={styles.rule}>
-        For {cropName} at {stageName.toLowerCase()}, water when moisture is below{" "}
-        {decision.lowThreshold}%.
-      </Text>
+      {report ? (
+        <Text style={styles.rule}>
+          {report.status === "live" ? "Live from the ESP32." : "Offline. Showing the last ESP32 report."}
+        </Text>
+      ) : null}
     </GlassCard>
   );
 }
@@ -66,8 +63,14 @@ const styles = StyleSheet.create({
   pillTextOff: {
     color: colors.primary,
   },
-  reason: {
+  moisture: {
     marginTop: 12,
+    fontSize: 20,
+    fontWeight: "700",
+    color: colors.textPrimary,
+  },
+  reason: {
+    marginTop: 8,
     fontSize: 17,
     lineHeight: 24,
     color: colors.textPrimary,

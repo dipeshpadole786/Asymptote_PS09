@@ -17,8 +17,10 @@ import { AlertsScreen } from "./screens/AlertsScreen";
 import { DashboardScreen } from "./screens/DashboardScreen";
 import { FarmSetupScreen } from "./screens/FarmSetupScreen";
 import { LoginScreen } from "./screens/LoginScreen";
+import { FieldMapScreen } from "./screens/FieldMapScreen";
 import { MoreScreen } from "./screens/MoreScreen";
 import { PlannerScreen } from "./screens/PlannerScreen";
+import { ScanCropScreen } from "./screens/ScanCropScreen";
 import {
   WelcomeScreen,
   type RootStackParamList,
@@ -109,6 +111,8 @@ function RootNavigation() {
           <Stack.Screen name="Planner" component={PlannerScreen} />
           <Stack.Screen name="Alerts" component={AlertsScreen} />
           <Stack.Screen name="More" component={MoreScreen} />
+          <Stack.Screen name="ScanCrop" component={ScanCropScreen} />
+          <Stack.Screen name="FieldMap" component={FieldMapScreen} />
         </Stack.Navigator>
       </AppLayout>
     </NavigationContainer>

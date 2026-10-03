@@ -131,10 +131,19 @@ export async function locateDevice(): Promise<Place> {
   }
 
   const { latitude, longitude } = position.coords;
+  return placeFromCoordinates(latitude, longitude, "device");
+}
+
+/** A map tap or any coordinates, named with the same reverse geocoder as GPS. */
+export async function placeFromCoordinates(
+  latitude: number,
+  longitude: number,
+  source = "map",
+): Promise<Place> {
   const label = await reversePlaceName(latitude, longitude);
-  const name = label.split(",")[0] || "Your field";
+  const name = label.split(",")[0] || "Field";
   return {
-    id: `device-${latitude.toFixed(3)}-${longitude.toFixed(3)}`,
+    id: `${source}-${latitude.toFixed(5)}-${longitude.toFixed(5)}`,
     name,
     label,
     latitude,

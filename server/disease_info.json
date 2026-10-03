@@ -1,0 +1,32 @@
+{
+  "maize cercospora leaf spot": {
+    "symptoms": "Small tan to gray lesions with reddish-brown margins, often rectangular because they follow leaf veins; lesions can merge and kill leaf tissue.",
+    "treatment": "Confirm the diagnosis and crop growth stage before treatment. Use resistant hybrids, manage infected residue, and apply only a locally approved fungicide when risk and label directions justify it.",
+    "prevention": "Plant resistant hybrids, rotate away from maize where practical, manage crop residue, and scout lower leaves before lesions spread into the upper canopy.",
+    "source_note": "General extension-style information; verify product approvals, dosage, and pre-harvest interval locally."
+  },
+  "maize common rust": {
+    "symptoms": "Small cinnamon to dark brown rust-colored pustules on both leaf surfaces; severe infection can reduce green leaf area.",
+    "treatment": "Remove volunteer maize and manage crop residue. Use a locally approved fungicide only when disease risk and crop growth stage justify it, following the product label and local extension guidance.",
+    "prevention": "Plant resistant varieties where available, rotate crops, and scout lower leaves regularly.",
+    "source_note": "General extension-style information; verify product approvals and diagnosis locally."
+  },
+  "maize northern leaf blight": {
+    "symptoms": "Long gray-green to tan cigar-shaped lesions that expand along maize leaves.",
+    "treatment": "Use resistant varieties and crop rotation. Fungicide decisions should be based on confirmed diagnosis, growth stage, disease risk, and the local product label.",
+    "prevention": "Use resistant hybrids, bury or manage infected residue where practical, and scout before the upper canopy is affected.",
+    "source_note": "General extension-style information; verify product approvals and diagnosis locally."
+  },
+  "potato early blight": {
+    "symptoms": "Brown to black circular lesions, often with concentric rings, beginning on older leaves.",
+    "treatment": "Remove heavily affected foliage where practical and maintain balanced irrigation and nutrition. Use only a locally approved fungicide according to its label and resistance-management guidance.",
+    "prevention": "Use certified seed, rotate away from potato and tomato, and avoid prolonged leaf wetness.",
+    "source_note": "General extension-style information; verify product approvals and diagnosis locally."
+  },
+  "potato late blight": {
+    "symptoms": "Water-soaked or olive-brown lesions that can expand rapidly in cool, wet conditions; white growth may occur on leaf undersides.",
+    "treatment": "Treat as urgent: isolate the affected area, avoid moving wet foliage, and contact local extension services. Use only an approved product and label program for the region.",
+    "prevention": "Use certified seed, resistant varieties where available, field sanitation, and weather-based scouting.",
+    "source_note": "General extension-style information; verify product approvals and diagnosis locally."
+  }
+}
